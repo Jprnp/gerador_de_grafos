@@ -1,0 +1,3 @@
+/home/ullrick/gerador_de_grafos/GeradorDeGrafos/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/ullrick/gerador_de_grafos/GeradorDeGrafos/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/ullrick/gerador_de_grafos/GeradorDeGrafos/cmake-build-debug/CMakeFiles/GeradorDeGrafos.dir

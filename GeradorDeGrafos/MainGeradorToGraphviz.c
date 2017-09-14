@@ -123,16 +123,17 @@ void gera_graphviz_matriz( short int m[num_vertices][num_vertices] )
             return;
         }
     }
-
+    char teste[10];
+    strcpy(teste, "teste");
     #ifdef linux
     struct passwd *pw = getpwuid(getuid());
     const char *homedir = pw->pw_dir;
     strcpy(homepath, homedir);
     #endif // linux
 
-    sprintf(buf,"mkdir %s\\grafosgerados", homepath);
+    sprintf(buf,"mkdir %s/grafosgerados", homepath);
     system(buf);
-    sprintf(buf, "%s\\grafosgerados\\grafo2.gv", homepath);
+    sprintf(buf, "%s/grafosgerados/grafo2.gv", homepath);
     fp = fopen(buf, "w");
     printf("graph G1 {\n");
     fputs("graph G1 {\n", fp);
@@ -169,10 +170,14 @@ void gera_graphviz_matriz( short int m[num_vertices][num_vertices] )
     fputs("}\n", fp);
     fclose(fp);
     sprintf(buf,
-            "dot -Tpng %s\\grafosgerados\\grafo2.gv -o %s\\grafosgerados\\grafo2.png",
+            "dot -Tpng %s/grafosgerados/grafo2.gv -o %s/grafosgerados/grafo2.png",
             homepath, homepath);
     system(buf);
-    sprintf(buf, "%s\\grafosgerados\\grafo2.png", homepath);
+    if (is_windows == 1) {
+        sprintf(buf, "%s/grafosgerados/grafo2.png", homepath);
+    } else {
+        sprintf(buf, "eog %s/grafosgerados/grafo2.png", homepath);
+    }
     system(buf);
 }
 
@@ -476,25 +481,14 @@ int main()
     #ifdef linux
     printf("Linux\n");
 
-    if (!system("graphviz"))
+    if (system("dot -V") != 0)
     {
         printf("Não foi identificada uma instalação do graphviz,\n");
         printf("deseja realizar a instalação?(s - Sim)\n");
-        char *answ;
-        scanf("%s", answ);
-        if (strcmp(answ, "s") == 0) {
-            char *pass, c, buf[200];
-            int i;
-            printf("Senha para sudo:\n");
-
-            while( (c=getch())!= '\n');{
-                pass[i] = c;
-                printf("*");
-                i++;
-            }
-
-            sprintf(buf, "echo %s | sudo apt-get install graphviz", pass);
-            system(buf);
+        char answ;
+        scanf("%c", &answ);
+        if (answ == 's') {
+            system("sudo apt-get install graphviz");
         }
         printf("\n\n");
     }
