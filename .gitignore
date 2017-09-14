@@ -1,3 +1,8 @@
+#Code::Blocks
+*.depend
+*.layout
+*.cbp
+
 # Prerequisites
 *.d
 
