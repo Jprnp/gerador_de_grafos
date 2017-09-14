@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1505327868 source:c:\users\ullrick\google drive\ufg\4 - periodo\grafos\gerador de grafos randomico\geradordegrafos\maingeradortographviz.c
+	<stdio.h>
+	<stdlib.h>
+	<strings.h>
+	<time.h>
+	"uthash.h"
+
+1504802506 c:\users\ullrick\google drive\ufg\4 - periodo\grafos\gerador de grafos randomico\geradordegrafos\uthash.h
+	<string.h>
+	<stddef.h>
+	<stdlib.h>
+	<stdint.h>
+	<stdint.h>
+	<stdint.h>
+
