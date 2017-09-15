@@ -6,6 +6,13 @@
 #include <strings.h>
 #include <time.h>
 
+#ifdef linux
+#include <termios.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+#endif // linux
+
 #include "uthash.h"
 
 //*****************************************************************************
@@ -13,6 +20,7 @@
 //*****************************************************************************
 
 int num_vertices = 0;
+int is_windows = 0;
 
 struct col
 {
@@ -107,11 +115,20 @@ void gera_graphviz_matriz( short int m[num_vertices][num_vertices] )
     char buf[200];
 
     //fp = fopen("../gerados/grafo1.gv", "w");
-    homepath = getenv("homepath");
-    if (homepath == NULL)
+    if (is_windows == 1)
     {
-        return;
+        homepath = getenv("homepath");
+        if (homepath == NULL)
+        {
+            return;
+        }
     }
+
+    #ifdef linux
+    struct passwd *pw = getpwuid(getuid());
+    const char *homedir = pw->pw_dir;
+    strcpy(homepath, homedir);
+    #endif // linux
 
     sprintf(buf,"mkdir %s\\grafosgerados", homepath);
     system(buf);
@@ -248,6 +265,20 @@ void gera_graphviz_lista( struct adj_list l[num_vertices] )
 //*****************************************************************************
 //                          FUN합ES GERAIS
 //*****************************************************************************
+
+#ifdef linux
+int getch() {
+    struct termios oldtc, newtc;
+    int ch;
+    tcgetattr(STDIN_FILENO, &oldtc);
+    newtc = oldtc;
+    newtc.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newtc);
+    ch=getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldtc);
+    return ch;
+}
+#endif // linux
 
 int ask_tipo()
 {
@@ -438,6 +469,36 @@ void printa_lista( struct adj_list l[num_vertices] )
 
 int main()
 {
+    #ifdef _WIN32
+    printf("Windows\n\n");
+    is_windows = 1;
+    #endif // _WIN32
+    #ifdef linux
+    printf("Linux\n");
+
+    if (!system("graphviz"))
+    {
+        printf("Não foi identificada uma instalação do graphviz,\n");
+        printf("deseja realizar a instalação?(s - Sim)\n");
+        char *answ;
+        scanf("%s", answ);
+        if (strcmp(answ, "s") == 0) {
+            char *pass, c, buf[200];
+            int i;
+            printf("Senha para sudo:\n");
+
+            while( (c=getch())!= '\n');{
+                pass[i] = c;
+                printf("*");
+                i++;
+            }
+
+            sprintf(buf, "echo %s | sudo apt-get install graphviz", pass);
+            system(buf);
+        }
+        printf("\n\n");
+    }
+    #endif // linux
     time_t t;
     srand((unsigned) time(&t));
     int perc;
