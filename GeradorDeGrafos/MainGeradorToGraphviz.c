@@ -122,9 +122,16 @@ void gera_graphviz_matriz(short int m[num_vertices][num_vertices]) {
     strcpy(homepath, homedir);
 #endif // linux
 
-    sprintf(buf, "mkdir %s/grafosgerados", homepath);
+    char sep[2];
+    if (is_windows == 1) {
+        strcpy(sep, "\\");
+    } else {
+        strcpy(sep, "/");
+    }
+
+    sprintf(buf, "mkdir %s%sgrafosgerados", homepath, sep);
     system(buf);
-    sprintf(buf, "%s/grafosgerados/grafo2.gv", homepath);
+    sprintf(buf, "%s%sgrafosgerados%sgrafo2.gv", homepath, sep, sep);
     fp = fopen(buf, "w");
     printf("graph G1 {\n");
     fputs("graph G1 {\n", fp);
@@ -157,13 +164,13 @@ void gera_graphviz_matriz(short int m[num_vertices][num_vertices]) {
     fputs("}\n", fp);
     fclose(fp);
     sprintf(buf,
-            "dot -Tpng %s/grafosgerados/grafo2.gv -o %s/grafosgerados/grafo2.png",
-            homepath, homepath);
+            "dot -Tpng %s%sgrafosgerados%sgrafo2.gv -o %s%sgrafosgerados%sgrafo2.png",
+            homepath, sep, sep, homepath, sep, sep);
     system(buf);
     if (is_windows == 1) {
-        sprintf(buf, "%s/grafosgerados/grafo2.png", homepath);
+        sprintf(buf, "%s%sgrafosgerados%sgrafo2.png", homepath, sep, sep);
     } else {
-        sprintf(buf, "eog %s/grafosgerados/grafo2.png", homepath);
+        sprintf(buf, "eog %s%sgrafosgerados%sgrafo2.png", homepath, sep, sep);
     }
     system(buf);
 }
@@ -215,9 +222,16 @@ void gera_graphviz_lista(struct adj_list l[num_vertices]) {
     strcpy(homepath, homedir);
 #endif // linux
 
-    sprintf(buf, "mkdir %s/grafosgerados", homepath);
+    char sep[2];
+    if (is_windows == 1) {
+        strcpy(sep, "\\");
+    } else {
+        strcpy(sep, "/");
+    }
+
+    sprintf(buf, "mkdir %s%sgrafosgerados", homepath, sep);
     system(buf);
-    sprintf(buf, "%s/grafosgerados/grafo66.gv", homepath);
+    sprintf(buf, "%s%sgrafosgerados%sgrafo66.gv", homepath, sep, sep);
     fp = fopen(buf, "w");
     printf("strict graph G1 {\n");
     fputs("strict graph G1 {\n", fp);
@@ -246,13 +260,13 @@ void gera_graphviz_lista(struct adj_list l[num_vertices]) {
     fputs("}\n", fp);
     fclose(fp);
     sprintf(buf,
-            "dot -Tpng %s/grafosgerados/grafo66.gv -o %s/grafosgerados/grafo66.png",
-            homepath, homepath);
+            "dot -Tpng %s%sgrafosgerados%sgrafo66.gv -o %s%sgrafosgerados%sgrafo66.png",
+            homepath, sep, sep, homepath, sep, sep);
     system(buf);
     if (is_windows == 1) {
-        sprintf(buf, "%s/grafosgerados/grafo66.png", homepath);
+        sprintf(buf, "%s%sgrafosgerados%sgrafo66.png", homepath, sep, sep);
     } else {
-        sprintf(buf, "eog %s/grafosgerados/grafo66.png", homepath);
+        sprintf(buf, "eog %s%sgrafosgerados%sgrafo66.png", homepath, sep, sep);
     }
     system(buf);
 }
@@ -424,13 +438,14 @@ void printa_lista(struct adj_list l[num_vertices]) {
 
 int main() {
     char answ;
+    int rc;
 #ifdef _WIN32
     printf("Windows\n\n");
     is_windows = 1;
 #endif // _WIN32
 #ifdef linux
     printf("Linux\n");
-    int rc = system("dot -V");
+    rc = system("dot -V");
     if (rc != 0) {
         printf("Não foi identificada uma instalação do graphviz,\n");
         printf("deseja realizar a instalação?(s - Sim)\n");
@@ -458,7 +473,7 @@ int main() {
         perc = CHEIO;
         preenche_matriz(matriz, perc);
         printa_matriz(matriz);
-        if (answ == 's' || rc == 0)
+        if (answ == 's' || rc == 0 || is_windows == 1)
             gera_graphviz_matriz(matriz);
     } else {
         struct adj_list adjacencias[num_vertices];
@@ -466,7 +481,7 @@ int main() {
         cria_listas_vazias(adjacencias);
         gera_ligacoes(adjacencias, perc);
         printa_lista(adjacencias);
-        if (answ == 's' || rc == 0)
+        if (answ == 's' || rc == 0 || is_windows == 1)
             gera_graphviz_lista(adjacencias);
     }
 
