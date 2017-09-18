@@ -55,3 +55,18 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Cmake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+
+# Cpp
+*.cpp
+*.cxx
