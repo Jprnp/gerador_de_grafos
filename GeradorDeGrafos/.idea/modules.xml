@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/GeradorDeGrafos.iml" filepath="$PROJECT_DIR$/.idea/GeradorDeGrafos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/GeradorDeGrafosNew.iml" filepath="$PROJECT_DIR$/.idea/GeradorDeGrafosNew.iml" />
     </modules>
   </component>
 </project>
