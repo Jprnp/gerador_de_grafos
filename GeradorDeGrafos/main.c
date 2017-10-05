@@ -1,4 +1,4 @@
-#define CHEIO 71
+#define CHEIO 71 //71
 #define VAZIO 31
 
 #include <stdio.h>
@@ -38,6 +38,11 @@ struct adj_list {
     int cod;
     struct adj_list *prox;
 };
+
+typedef struct verificados {
+    int qtd;
+    int lista[0];
+}VERF;
 
 //*****************************************************************************
 //                          FUN합ES P/ GRAPHVIZ
@@ -107,7 +112,7 @@ void fill_colors() {
 * Função para gerar o .png do grafo gerado quando o tipo de grafo for
 * CHEIO.
 **/
-void gera_graphviz_matriz(short int m[num_vertices][num_vertices]) {
+void gera_graphviz_matriz(short int m[num_vertices][num_vertices], char * title) {
     FILE *fp;
     char *homepath = "";
     short int i, u;
@@ -147,6 +152,9 @@ void gera_graphviz_matriz(short int m[num_vertices][num_vertices]) {
     fp = fopen(buf, "w");
     printf("graph G1 {\n");
     fputs("graph G1 {\n", fp);
+    printf("\tGraph [label = \"%s\"];\n", title);
+    sprintf(buf, "\tGraph [label = \"%s\"];\n", title);
+    fputs(buf, fp);
     for (i = 0; i < num_vertices; i++) {
         id = (i + 1) % 10;
         if ((i % 10) == 9) {
@@ -217,7 +225,7 @@ void graphviz_item_lista(FILE *fp, struct adj_list *e) {
 * Função para gerar o .png do grafo gerado quando o tipo de grafo for
 * VAZIO.
 **/
-void gera_graphviz_lista(struct adj_list l[num_vertices]) {
+void gera_graphviz_lista(struct adj_list l[num_vertices], char * title) {
     FILE *fp;
     char *homepath = "";
     int i, id;
@@ -256,7 +264,9 @@ void gera_graphviz_lista(struct adj_list l[num_vertices]) {
     fp = fopen(buf, "w");
     printf("strict graph G1 {\n");
     fputs("strict graph G1 {\n", fp);
-
+    printf("\tGraph [label = \"%s\"];\n", title);
+    sprintf(buf, "\tGraph [label = \"%s\"];\n", title);
+    fputs(buf, fp);
     for (i = 0; i < num_vertices; i++) {
         id = (i + 1) % 10;
         if ((i % 10) == 9) {
@@ -324,13 +334,6 @@ int ask_tipo() {
 //                          FUN합ES P/ MATRIZ
 //*****************************************************************************
 
-typedef struct vazios {
-    int * lin;
-    int * col;
-    int num_lin;
-    int num_col;
-} VAZ;
-
 void preenche_matriz(short int m[num_vertices][num_vertices], int p) {
     short int i, u;
     short int is_aresta = 0;
@@ -365,43 +368,38 @@ void printa_matriz(short int m[num_vertices][num_vertices]) {
     }
 }
 
-VAZ get_vazios( short int m[num_vertices][num_vertices] ) {
-    VAZ vazios;
-    vazios.lin = malloc(num_vertices * sizeof *vazios.lin);
-    vazios.col = malloc(num_vertices * sizeof *vazios.col);
-    short int i, u, is_vazio;
-    int num_lin = 0, num_col = 0;
-    int lin[num_vertices], col[num_vertices];
-
-    for (i = 0; i < num_vertices - 1; i++) {
-        is_vazio = 1;
-        for (u = i + 1; u < num_vertices; u++) {
-            if (m[i][i] == 1) {
-                is_vazio = 0;
-                break;
+int verifica_conexoes(int lin, int cont, short int m[num_vertices][num_vertices]) {
+    int col, indices[num_vertices], i = 0, u;
+    if (cont == num_vertices) {
+        return 1;
+    } else {
+        for (col = 0; col < num_vertices; col++) {
+            if (m[lin][col]) {
+                indices[i] = col;
+                i++;
             }
         }
-        if (is_vazio == 1) {
-            lin[num_lin] = i;
-            num_lin++;
+
+        for (u = 0; u < i; u++) {
+            if (verifica_conexoes(indices[u], cont + 1, m)) {
+                return 1;
+            }
         }
+
+        return 0;
     }
-
-    vazios.lin = lin;
-    vazios.num_lin = num_lin;
-
-    return vazios;
 }
 
 int is_conexo_matriz( short int m[num_vertices][num_vertices] ) {
-    VAZ vazios = get_vazios( m );
-    int i;
+    int i, con = 0;
 
-    for (i = 0; i < vazios.num_lin; i++) {
-        printf("\n%d\n", vazios.lin[i]);
+    for (i = 0; i < num_vertices; i++) {
+        con = verifica_conexoes(i, 1, m);
+
+        if (con != 1) {
+            return 0;
+        }
     }
-
-    printf("\n------------------------------------------\n");
 
     return 1;
 }
@@ -490,6 +488,64 @@ void printa_lista(struct adj_list l[num_vertices]) {
     }
 }
 
+int verifica_conexoes_lista( VERF * verf, struct adj_list l, struct adj_list la[] ) {
+    int indices[num_vertices], i = 0, u, u2;
+    int contin = 0;
+    struct adj_list l1 = l;
+    verf->lista[verf->qtd] = l.cod;
+    verf->qtd++;
+    if (verf->qtd == num_vertices) {
+        return 1;
+    } else {
+        while(l1.prox != NULL) {
+            l1 = (*l1.prox);
+            indices[i] = l1.cod;
+            i++;
+        }
+
+        for (u = 0; u < i; u++) {
+            l1 = la[indices[u]];
+            for (u2 = 0; u2 < verf->qtd; u2++) {
+                if (verf->lista[u2] == indices[u]) {
+                    contin= 1;
+                    break;
+                }
+            }
+            if (contin) {
+                contin = 0;
+            } else {
+                if (verifica_conexoes_lista(verf, l1, la)) {
+                    return 1;
+                }
+            }
+        }
+
+        return 0;
+    }
+}
+
+int is_conexo_lista( struct adj_list l[num_vertices] ) {
+    int i, con = 0;
+    VERF * verf;
+    verf = malloc((sizeof (*verf)) + num_vertices * sizeof(int));
+    verf->qtd = 0;
+
+    for (i = 0; i < num_vertices; i++) {
+
+        con = verifica_conexoes_lista(verf, l[i], l);
+
+        if (con == 1) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+
+
+    return 0;
+}
+
 //*****************************************************************************
 //                             MAIN
 //*****************************************************************************
@@ -525,6 +581,8 @@ int main() {
     srand((unsigned) time(&t));
     int perc;
     int tipo_grafo;
+    int is_conexo;
+    char title[20];
 
     fill_colors();
 
@@ -538,17 +596,32 @@ int main() {
         perc = CHEIO;
         preenche_matriz(matriz, perc);
         printa_matriz(matriz);
-        is_conexo_matriz( matriz );
+        is_conexo = is_conexo_matriz( matriz );
+        if ( is_conexo ) {
+            printf("\nGRAFO CONEXO\n\n");
+            strcpy(title, "GRAFO CONEXO");
+        } else {
+            printf("\nGRAFO DESCONEXO\n\n");
+            strcpy(title, "GRAFO DESCONEXO");
+        }
         if (answ == 's' || rc == 0) // Só gera o .png se o graphviz tiver instalado
-            gera_graphviz_matriz(matriz);
+            gera_graphviz_matriz(matriz, title);
     } else {
         struct adj_list adjacencias[num_vertices];
         perc = VAZIO;
         cria_listas_vazias(adjacencias);
         gera_ligacoes(adjacencias, perc);
         printa_lista(adjacencias);
+        is_conexo = is_conexo_lista( adjacencias );
+        if ( is_conexo ) {
+            printf("\nGRAFO CONEXO\n\n");
+            strcpy(title, "GRAFO CONEXO");
+        } else {
+            printf("\nGRAFO DESCONEXO\n\n");
+            strcpy(title, "GRAFO DESCONEXO");
+        }
         if (answ == 's' || rc == 0) // Só gera o .png se o graphviz tiver instalado
-            gera_graphviz_lista(adjacencias);
+            gera_graphviz_lista(adjacencias, title);
     }
 
     return (0);
