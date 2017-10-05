@@ -1,7 +1,7 @@
-"C:\Program Files\JetBrains\CLion 2017.2.2\bin\cmake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" C:\Users\Ullrick\CLionProjects\GeradorDeGrafosNew
+"C:\Program Files\JetBrains\CLion 2017.2.2\bin\cmake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "C:\Users\Ullrick\Google Drive\UFG\4 - Periodo\Grafos\gerador_de_grafos\GeradorDeGrafos"
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/Users/Ullrick/CLionProjects/GeradorDeGrafosNew/cmake-build-debug
+-- Build files have been written to: C:/Users/Ullrick/Google Drive/UFG/4 - Periodo/Grafos/gerador_de_grafos/GeradorDeGrafos/cmake-build-debug
 
 Problems were encountered while collecting compiler information:
 	cc1.exe: error: unrecognized command line option "-fpch-preprocess"

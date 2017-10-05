@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Ullrick/CLionProjects/GeradorDeGrafosNew
+# Install script for directory: C:/Users/Ullrick/Google Drive/UFG/4 - Periodo/Grafos/gerador_de_grafos/GeradorDeGrafos
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,5 +35,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/Ullrick/CLionProjects/GeradorDeGrafosNew/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/Ullrick/Google Drive/UFG/4 - Periodo/Grafos/gerador_de_grafos/GeradorDeGrafos/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
