@@ -213,6 +213,12 @@ GeradorDeGrafos_BINARY_DIR:STATIC=C:/Users/Ullrick/Google Drive/UFG/4 - Periodo/
 //Value Computed by CMake
 GeradorDeGrafos_SOURCE_DIR:STATIC=C:/Users/Ullrick/Google Drive/UFG/4 - Periodo/Grafos/gerador_de_grafos/GeradorDeGrafos
 
+//The directory containing a CMake configuration file for libtest1.a.
+libtest1.a_DIR:PATH=libtest1.a_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for libtest.
+libtest_DIR:PATH=libtest_DIR-NOTFOUND
+
 
 ########################
 # INTERNAL cache entries

@@ -1,6 +1,9 @@
 #define CHEIO 71 //71
 #define VAZIO 31
 
+#include "uthash/uthash.h"
+//#include "graphviz/graphviz.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -17,8 +20,6 @@
 
 #endif // linux
 
-#include "uthash.h"
-
 //*****************************************************************************
 //                          DECLARA합ES GLOBAIS
 //*****************************************************************************
@@ -27,9 +28,9 @@ int num_vertices = 0;
 int is_windows = 0;
 
 struct col {
-    int id;            /* we'll use this field as the key */
+    int id;
     char cor[15];
-    UT_hash_handle hh; /* makes this structure hashable */
+    UT_hash_handle hh;
 };
 
 struct col *colors = NULL;
@@ -112,6 +113,7 @@ void fill_colors() {
 * Função para gerar o .png do grafo gerado quando o tipo de grafo for
 * CHEIO.
 **/
+
 void gera_graphviz_matriz(short int m[num_vertices][num_vertices], char * title) {
     FILE *fp;
     char *homepath = "";
@@ -225,6 +227,7 @@ void graphviz_item_lista(FILE *fp, struct adj_list *e) {
 * Função para gerar o .png do grafo gerado quando o tipo de grafo for
 * VAZIO.
 **/
+
 void gera_graphviz_lista(struct adj_list l[num_vertices], char * title) {
     FILE *fp;
     char *homepath = "";
@@ -525,23 +528,12 @@ int verifica_conexoes_lista( VERF * verf, struct adj_list l, struct adj_list la[
 }
 
 int is_conexo_lista( struct adj_list l[num_vertices] ) {
-    int i, con = 0;
+    int i;
     VERF * verf;
     verf = malloc((sizeof (*verf)) + num_vertices * sizeof(int));
     verf->qtd = 0;
 
-    for (i = 0; i < num_vertices; i++) {
-
-        con = verifica_conexoes_lista(verf, l[i], l);
-
-        if (con == 1) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
-
+    return verifica_conexoes_lista(verf, l[0], l);
 
     return 0;
 }
@@ -606,6 +598,7 @@ int main() {
         }
         if (answ == 's' || rc == 0) // Só gera o .png se o graphviz tiver instalado
             gera_graphviz_matriz(matriz, title);
+            //gera_graphviz_matriz(num_vertices, matriz, title);
     } else {
         struct adj_list adjacencias[num_vertices];
         perc = VAZIO;
@@ -622,6 +615,7 @@ int main() {
         }
         if (answ == 's' || rc == 0) // Só gera o .png se o graphviz tiver instalado
             gera_graphviz_lista(adjacencias, title);
+            //gera_graphviz_lista(num_vertices, adjacencias, title);
     }
 
     return (0);
