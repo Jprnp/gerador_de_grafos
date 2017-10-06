@@ -2,7 +2,7 @@
 #define VAZIO 31
 
 #include "uthash/uthash.h"
-//#include "graphviz/graphviz.h"
+#include "graphviz/graphviz.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,9 +25,9 @@
 //*****************************************************************************
 
 int num_vertices = 0;
-int is_windows = 0;
+//int is_windows = 0;
 
-struct col {
+/*struct col {
     int id;
     char cor[15];
     UT_hash_handle hh;
@@ -38,7 +38,7 @@ struct col *colors = NULL;
 struct adj_list {
     int cod;
     struct adj_list *prox;
-};
+};*/
 
 typedef struct verificados {
     int qtd;
@@ -48,7 +48,7 @@ typedef struct verificados {
 //*****************************************************************************
 //                          FUN합ES P/ GRAPHVIZ
 //*****************************************************************************
-
+/*
 void add_color(int color_id, char *cor) {
     struct col *s;
     HASH_FIND_INT(colors, &color_id, s);
@@ -108,12 +108,12 @@ void fill_colors() {
         add_color(i, cor);
     }
 }
-
+*/
 /**
 * Função para gerar o .png do grafo gerado quando o tipo de grafo for
 * CHEIO.
 **/
-
+/*
 void gera_graphviz_matriz(short int m[num_vertices][num_vertices], char * title) {
     FILE *fp;
     char *homepath = "";
@@ -222,12 +222,12 @@ void graphviz_item_lista(FILE *fp, struct adj_list *e) {
         }
     }
 }
-
+*/
 /**
 * Função para gerar o .png do grafo gerado quando o tipo de grafo for
 * VAZIO.
 **/
-
+/*
 void gera_graphviz_lista(struct adj_list l[num_vertices], char * title) {
     FILE *fp;
     char *homepath = "";
@@ -304,7 +304,7 @@ void gera_graphviz_lista(struct adj_list l[num_vertices], char * title) {
     }
     system(buf);
 }
-
+*/
 //*****************************************************************************
 //                          FUN합ES GERAIS
 //*****************************************************************************
@@ -552,7 +552,7 @@ int main() {
         printf("ou a variável path não foi configurada\n.");
     }
     printf("Windows\n\n");
-    is_windows = 1;
+    //is_windows = 1;
 #endif // _WIN32
 #ifdef linux
     printf("Linux\n");
@@ -597,8 +597,8 @@ int main() {
             strcpy(title, "GRAFO DESCONEXO");
         }
         if (answ == 's' || rc == 0) // Só gera o .png se o graphviz tiver instalado
-            gera_graphviz_matriz(matriz, title);
-            //gera_graphviz_matriz(num_vertices, matriz, title);
+            //gera_graphviz_matriz(matriz, title);
+            gera_graphviz_matriz(num_vertices, matriz, title);
     } else {
         struct adj_list adjacencias[num_vertices];
         perc = VAZIO;
@@ -614,8 +614,8 @@ int main() {
             strcpy(title, "GRAFO DESCONEXO");
         }
         if (answ == 's' || rc == 0) // Só gera o .png se o graphviz tiver instalado
-            gera_graphviz_lista(adjacencias, title);
-            //gera_graphviz_lista(num_vertices, adjacencias, title);
+            //gera_graphviz_lista(adjacencias, title);
+            gera_graphviz_lista(num_vertices, adjacencias, title);
     }
 
     return (0);
